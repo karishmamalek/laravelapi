@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('notifyUser', [AuthController::class, 'notifyUser']);
+    Route::post('sendNotification', [AuthController::class, 'sendNotification']);
     //Route::post('message', [AuthController::class, 'message']);
 });
 

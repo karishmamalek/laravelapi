@@ -88,9 +88,9 @@ class AuthController extends Controller
  
         $user = User::where('id', $request->id)->first();
       
-        $notification_id = $user->notification_id;
-        $title = "Greeting Notification";
-        $message = "Have good day!";
+        $notification_id = "clXnlFcmTO62--wkKzUcPf:APA91bE4ayV0N6HKiR3XGB7v9-Fk12zDys706XGZFwS_mTl-R22LaRPnI1jy4iBhZiu4L7p-Pd8SkGxBLnLbcBaodq3UuGh2N-lsxk8etevCK3GBCbg-1y8zFutSna9SHxHKs9poPcAz";
+        $title = "Good Night";
+        $message = "Love you sahil..!";
         $id = $user->id;
         $type = "basic";
       
@@ -110,4 +110,37 @@ class AuthController extends Controller
       
      }
 
+     public function sendNotification(Request $request)
+     {
+         $firebaseToken = "clXnlFcmTO62--wkKzUcPf:APA91bE4ayV0N6HKiR3XGB7v9-Fk12zDys706XGZFwS_mTl-R22LaRPnI1jy4iBhZiu4L7p-Pd8SkGxBLnLbcBaodq3UuGh2N-lsxk8etevCK3GBCbg-1y8zFutSna9SHxHKs9poPcAz";
+             
+         $SERVER_API_KEY = env('FCM_KEY');
+     
+         $data = [
+             "registration_ids" => $firebaseToken,
+             "notification" => [
+                 "title" => $request->title,
+                 "body" => $request->body,  
+             ]
+         ];
+         $dataString = json_encode($data);
+       
+         $headers = [
+             'Authorization: key=' . $SERVER_API_KEY,
+             'Content-Type: application/json',
+         ];
+       
+         $ch = curl_init();
+         
+         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+         curl_setopt($ch, CURLOPT_POST, true);
+         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+                  
+         $response = curl_exec($ch);
+     
+         return jsonResponseData($this->SUCCESS_STATUS_CODE , $this->SUCCESS_MSG, null);
+     }
 }
